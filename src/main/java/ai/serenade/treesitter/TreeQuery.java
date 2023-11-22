@@ -26,7 +26,7 @@ public class TreeQuery implements AutoCloseable {
         return new TreeQuery(TreeSitter.queryNew(language, bytes, bytes.length), cursor);
     }
 
-    public class TreeQueryCursor implements AutoCloseable {
+    public static class TreeQueryCursor implements AutoCloseable {
         private long pointer;
 
         TreeQueryCursor(long pointer) {
