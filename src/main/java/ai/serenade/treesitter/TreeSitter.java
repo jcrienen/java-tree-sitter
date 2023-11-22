@@ -52,7 +52,7 @@ public class TreeSitter {
 
   public static native void treeQueryDelete(long pointer);
 
-  public static native TreeQueryMatch treeQueryGoToNextMatch(long pointer);
+  public static native Node treeQueryGoToNextMatch(long pointer);
 
   public static native void treeQueryCursorDelete(long pointer);
 }

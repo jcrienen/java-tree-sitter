@@ -19,7 +19,7 @@ public class TreeQuery implements AutoCloseable {
         TreeSitter.executeTreeQuery(cursor.pointer, this.pointer, node);
     }
 
-    public TreeQueryMatch gotoNextMatch() { return TreeSitter.treeQueryGoToNextMatch(pointer); }
+    public Node gotoNextMatch() { return TreeSitter.treeQueryGoToNextMatch(pointer); }
 
     public static TreeQuery createTreeQuery(long language, String source, TreeQueryCursor cursor){
         byte[] bytes = source.getBytes(StandardCharsets.UTF_16LE);
