@@ -208,7 +208,7 @@ Java_ai_serenade_treesitter_TreeSitter_treeCursorCurrentTreeCursorNode(
 
 JNIEXPORT void JNICALL Java_ai_serenade_treesitter_TreeSitter_treeCursorDelete(
     JNIEnv* env, jclass self, jlong cursor) {
-  delete (TSTreeCursor*)cursor;
+  ts_tree_cursor_delete((TSTreeCursor*)cursor);
 }
 
 JNIEXPORT jboolean JNICALL
@@ -240,4 +240,41 @@ JNIEXPORT void JNICALL Java_ai_serenade_treesitter_TreeSitter_treeDelete(
 JNIEXPORT jobject JNICALL Java_ai_serenade_treesitter_TreeSitter_treeRootNode(
     JNIEnv* env, jclass self, jlong tree) {
   return _marshalNode(env, ts_tree_root_node((TSTree*)tree));
+}
+
+JNIEXPORT jlong JNICALL Java_ai_serenade_treesitter_TreeSitter_queryNew(
+    JNIEnv* env, jclass self, jlong language, jbyteArray source_bytes, jint length) {
+  jbyte* source = env->GetByteArrayElements(source_bytes, NULL);
+  TSQuery* query = ts_query_new((TSLanguage*) language, reinterpret_cast<const char*>(source), length, NULL, (TSQueryError*) TSQueryErrorNone);
+  return (jlong)query;
+}
+
+JNIEXPORT jlong JNICALL Java_ai_serenade_treesitter_TreeSitter_queryCursorNew(
+    JNIEnv* env, jclass self) {
+  TSQueryCursor* queryCursor = ts_query_cursor_new();
+  return (jlong)queryCursor;
+}
+
+JNIEXPORT void JNICALL Java_ai_serenade_treesitter_TreeSitter_executeTreeQuery(
+    JNIEnv* env, jclass self, jlong cursor, jlong query, jobject node) {
+  ts_query_cursor_exec((TSQueryCursor*) cursor, (TSQuery *) query, _unmarshalNode(env, node));
+}
+
+JNIEXPORT void JNICALL Java_ai_serenade_treesitter_TreeSitter_treeQueryCursorDelete(
+    JNIEnv* env, jclass self, jlong cursor) {
+  ts_query_cursor_delete((TSQueryCursor*)cursor);
+}
+
+JNIEXPORT void JNICALL Java_ai_serenade_treesitter_TreeSitter_treeQueryDelete(
+    JNIEnv* env, jclass self, jlong query) {
+  ts_query_delete((TSQuery*)query);
+}
+
+JNIEXPORT jobject JNICALL
+Java_ai_serenade_treesitter_TreeSitter_treeQueryGoToNextMatch(
+    JNIEnv* env, jclass self, jlong cursor) {
+  TSQueryMatch* match;
+  ts_query_cursor_next_match((TSQueryCursor*)cursor, match);
+  return _marshalNode(
+      env, (TSNode) match->captures->node);
 }
