@@ -43,16 +43,4 @@ public class TreeSitter {
   public static native void treeDelete(long tree);
 
   public static native Node treeRootNode(long tree);
-
-  public static native long queryNew(long language, byte[] source, int length);
-
-  public static native long queryCursorNew();
-
-  public static native void executeTreeQuery(long cursor, long query, Node node);
-
-  public static native void treeQueryDelete(long pointer);
-
-  public static native Node treeQueryGoToNextMatch(long pointer);
-
-  public static native void treeQueryCursorDelete(long pointer);
 }
